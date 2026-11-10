@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="20" fill="#241207"/>
+  <text x="50" y="46" font-size="34" text-anchor="middle" fill="#e8b34b" font-family="serif" font-weight="bold">天</text>
+  <path d="M30 68 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0" stroke="#b3392e" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <polygon points="42,78 62,86 42,94" fill="#e8b34b"/>
+</svg>

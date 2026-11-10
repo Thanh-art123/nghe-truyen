@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1a0f0a">
+<title>Đại Thiên Tông — Nghe Truyện</title>
+<link rel="manifest" href="manifest.json">
+<style>
+  :root{
+    --bg:#17100b; --panel:#241811; --panel2:#2f2015; --gold:#e8b34b; --gold2:#c9932f;
+    --text:#f3e9d7; --dim:#b9a888; --line:#3d2b1a; --accent:#b3392e;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;}
+  header{position:sticky;top:0;z-index:5;background:linear-gradient(180deg,#241207,#1a0f0a);
+    border-bottom:1px solid var(--line);padding:12px 14px 10px;text-align:center}
+  header h1{margin:0;font-size:19px;letter-spacing:2px;color:var(--gold);font-weight:800}
+  header p{margin:2px 0 0;font-size:12px;color:var(--dim)}
+  main{max-width:720px;margin:0 auto;padding:12px 12px 190px}
+  .tabs{display:flex;gap:8px;margin:4px 0 12px}
+  .tabs button{flex:1;padding:11px;border-radius:10px;border:1px solid var(--line);
+    background:var(--panel);color:var(--text);font-size:15px;font-weight:600}
+  .tabs button.on{background:var(--gold);color:#241207;border-color:var(--gold)}
+  .book{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:13px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .book b{font-size:16px}
+  .book span{color:var(--dim);font-size:13px;display:block;margin-top:2px}
+  .book .go{background:var(--accent);color:#fff;border:0;border-radius:9px;padding:9px 14px;font-size:14px;font-weight:700;white-space:nowrap}
+  .chap{display:flex;justify-content:space-between;align-items:center;background:var(--panel);
+    border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:8px}
+  .chap b{font-size:15px;font-weight:600}
+  .chap.now{border-color:var(--gold)}
+  .chap .pos{color:var(--gold);font-size:12px}
+  .backbtn{background:none;border:0;color:var(--gold);font-size:15px;padding:6px 0;font-weight:700}
+  textarea{width:100%;min-height:180px;background:var(--panel);color:var(--text);
+    border:1px solid var(--line);border-radius:12px;padding:12px;font-size:15px;line-height:1.5}
+  .rowbtn{display:flex;gap:8px;margin-top:10px}
+  .rowbtn button,.filebtn{flex:1;padding:12px;border-radius:10px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--text);font-size:15px;font-weight:600;text-align:center}
+  .rowbtn button.primary{background:var(--gold);color:#241207;border-color:var(--gold)}
+  #reader{line-height:1.85;font-size:18px;padding:4px 2px}
+  #reader p{margin:0 0 14px;color:#d9cbb2}
+  #reader p.active{color:#fff;background:rgba(232,179,75,.13);border-radius:6px;
+    box-shadow:0 0 0 6px rgba(232,179,75,.13)}
+  #readerTitle{font-size:19px;color:var(--gold);margin:6px 0 12px}
+  /* ------- player bar ------- */
+  #player{position:fixed;left:0;right:0;bottom:0;z-index:9;background:#120b06f2;
+    border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
+  #player .inner{max-width:720px;margin:0 auto}
+  #nowTitle{font-size:13px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #nowTitle b{color:var(--gold);font-size:14px}
+  .controls{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:8px}
+  .controls button{background:var(--panel2);border:1px solid var(--line);color:var(--text);
+    border-radius:50%;width:46px;height:46px;font-size:18px}
+  .controls button#btnPlay{width:60px;height:60px;font-size:25px;background:var(--gold);color:#241207;border-color:var(--gold)}
+  .controls button.small{width:40px;height:40px;font-size:14px;border-radius:10px}
+  .settings{display:flex;gap:8px;margin-top:10px}
+  .settings label{flex:1;font-size:11px;color:var(--dim);display:block}
+  .settings select,.settings input[type=range]{width:100%;margin-top:3px;accent-color:var(--gold)}
+  .settings select{background:var(--panel2);color:var(--text);border:1px solid var(--line);
+    border-radius:8px;padding:7px;font-size:13px}
+  .hidden{display:none!important}
+  .note{color:var(--dim);font-size:13px;line-height:1.55}
+  #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:185px;z-index:20;
+    background:#000d;border:1px solid var(--gold);color:var(--gold);padding:9px 16px;
+    border-radius:20px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;max-width:88vw;text-align:center}
+  #toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <h1>ĐẠI THIÊN TÔNG</h1>
+  <p>Nghe truyện audio — chọn truyện, bấm nghe, máy tự đọc</p>
+</header>
+
+<main>
+  <div class="tabs">
+    <button id="tabLib" class="on">📚 Thư viện</button>
+    <button id="tabPaste">📝 Dán truyện</button>
+  </div>
+
+  <!-- Thư viện -->
+  <section id="viewLib">
+    <div id="bookList"></div>
+    <div id="chapWrap" class="hidden">
+      <button class="backbtn" id="btnBackBooks">← Tất cả truyện</button>
+      <h3 id="bookTitle" style="margin:4px 0 10px;color:var(--gold)"></h3>
+      <div id="chapList"></div>
+    </div>
+  </section>
+
+  <!-- Dán truyện -->
+  <section id="viewPaste" class="hidden">
+    <textarea id="pasteBox" placeholder="Dán nội dung truyện vào đây… (cả chương dài cũng được, máy tự chia câu để đọc)"></textarea>
+    <div class="rowbtn">
+      <button id="btnPasteRead" class="primary">▶ Nghe ngay</button>
+      <label class="filebtn">📂 Mở file .txt<input type="file" id="fileTxt" accept=".txt,text/plain" class="hidden"></label>
+    </div>
+    <p class="note">Mẹo: mở trang truyện trên trình duyệt, bôi đen toàn bộ chương, sao chép rồi dán vào đây là nghe được — truyện nào cũng được, không cần chờ tải.</p>
+  </section>
+
+  <!-- Màn đọc -->
+  <section id="viewRead" class="hidden">
+    <button class="backbtn" id="btnBackLib">← Quay lại</button>
+    <h3 id="readerTitle"></h3>
+    <div id="reader"></div>
+  </section>
+</main>
+
+<div id="toast"></div>
+
+<!-- Thanh nghe -->
+<div id="player">
+  <div class="inner">
+    <div id="nowTitle">Chưa chọn chương nào</div>
+    <div class="controls">
+      <button id="btnPrevChap" title="Chương trước">⏮</button>
+      <button id="btnBack10" title="Lùi 1 câu">⏪</button>
+      <button id="btnPlay">▶</button>
+      <button id="btnFwd10" title="Tới 1 câu">⏩</button>
+      <button id="btnNextChap" title="Chương sau">⏭</button>
+      <button id="btnTimer" class="small" title="Hẹn giờ tắt">⏱</button>
+    </div>
+    <div class="settings">
+      <label>Giọng đọc<select id="selVoice"></select></label>
+      <label style="flex:.8">Tốc độ <span id="rateVal">1.0×</span>
+        <input type="range" id="rngRate" min="0.7" max="1.6" step="0.05" value="1">
+      </label>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+// ================= Trạng thái =================
+var S = {
+  book: null, chapIdx: -1, paras: [], sentIdx: 0,
+  playing: false, voice: null, rate: 1.0, timer: null, timerEnd: 0,
+  mode: 'lib' // lib | paste
+};
+var voices = [];
+var $ = function(id){ return document.getElementById(id); };
+function toast(msg){ var t=$('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('show'); },2600); }
+function savePos(){ try{ localStorage.setItem('nghe_truyen_pos', JSON.stringify({
+  book: S.book ? S.book.id : null, chap: S.chapIdx, sent: S.sentIdx, mode: S.mode })); }catch(e){} }
+function loadPos(){ try{ return JSON.parse(localStorage.getItem('nghe_truyen_pos')||'null'); }catch(e){ return null; } }
+
+// ================= Giọng đọc =================
+function refreshVoices(){
+  voices = speechSynthesis.getVoices();
+  var sel = $('selVoice'); sel.innerHTML='';
+  var sorted = voices.slice().sort(function(a,b){
+    var av = /vi|viet/i.test(a.lang+' '+a.name) ? 0 : 1, bv = /vi|viet/i.test(b.lang+' '+b.name) ? 0 : 1;
+    return av-bv; });
+  sorted.forEach(function(v,i){
+    var o=document.createElement('option'); o.value=i;
+    o.textContent = v.name + ' (' + v.lang + ')';
+    sel.appendChild(o); });
+  var saved = localStorage.getItem('nghe_truyen_voice');
+  var pick = 0;
+  sorted.forEach(function(v,i){ if (v.name===saved) pick=i; });
+  if (sorted.length){ S.voice = sorted[pick]; sel.value = pick; }
+}
+if ('speechSynthesis' in window){
+  refreshVoices();
+  speechSynthesis.onvoiceschanged = refreshVoices;
+} else {
+  toast('Trình duyệt này không có giọng đọc. Hãy mở bằng Chrome trên điện thoại.');
+}
+$('selVoice').addEventListener('change', function(){
+  var sorted = voices.slice().sort(function(a,b){
+    var av = /vi|viet/i.test(a.lang+' '+a.name) ? 0 : 1, bv = /vi|viet/i.test(b.lang+' '+b.name) ? 0 : 1;
+    return av-bv; });
+  S.voice = sorted[+this.value];
+  if (S.voice) localStorage.setItem('nghe_truyen_voice', S.voice.name);
+  if (S.playing) speakFrom(S.sentIdx);
+});
+$('rngRate').addEventListener('input', function(){
+  S.rate = +this.value; $('rateVal').textContent = S.rate.toFixed(2).replace(/0$/,'') + '×';
+  if (S.playing) speakFrom(S.sentIdx);
+});
+
+// ================= Chia câu =================
+function splitSentences(text){
+  var out = [];
+  String(text||'').split(/\n+/).forEach(function(para){
+    para = para.trim(); if (!para) return;
+    var parts = para.match(/[^.!?…]+[.!?…]+["”’']?|[^.!?…]+$/g) || [para];
+    var buf = '';
+    parts.forEach(function(p){
+      p = p.trim(); if (!p) return;
+      if ((buf + ' ' + p).length <= 190) buf = buf ? buf + ' ' + p : p;
+      else { if (buf) out.push(buf); buf = p; }
+    });
+    if (buf) out.push(buf);
+  });
+  return out;
+}
+
+// ================= Đọc =================
+function stopSpeak(){ speechSynthesis.cancel(); S.playing=false; $('btnPlay').textContent='▶'; }
+function speakFrom(idx){
+  if (!S.paras.length) return;
+  speechSynthesis.cancel();
+  S.sentIdx = Math.max(0, Math.min(idx, S.paras.length-1));
+  S.playing = true; $('btnPlay').textContent='⏸';
+  highlight(); savePos();
+  var u = new SpeechSynthesisUtterance(S.paras[S.sentIdx]);
+  if (S.voice) u.voice = S.voice;
+  u.lang = (S.voice && S.voice.lang) || 'vi-VN';
+  u.rate = S.rate;
+  u.onend = function(){
+    if (!S.playing) return;
+    if (S.sentIdx < S.paras.length - 1) speakFrom(S.sentIdx + 1);
+    else nextChapterOrStop();
+  };
+  u.onerror = function(e){ if (e.error !== 'canceled' && e.error !== 'interrupted') {
+    if (S.playing && S.sentIdx < S.paras.length-1) speakFrom(S.sentIdx+1); } };
+  speechSynthesis.speak(u);
+}
+function highlight(){
+  var ps = $('reader').children;
+  for (var i=0;i<ps.length;i++) ps[i].classList.toggle('active', i===S.sentIdx);
+  var el = ps[S.sentIdx];
+  if (el) el.scrollIntoView({block:'center', behavior:'smooth'});
+}
+function nextChapterOrStop(){
+  if (S.mode==='lib' && S.book && S.chapIdx < S.book.chapters.length-1){
+    openChapter(S.book, S.chapIdx+1, true);
+  } else { S.playing=false; $('btnPlay').textContent='▶'; toast('Đã hết. 🎉'); }
+}
+$('btnPlay').addEventListener('click', function(){
+  if (!S.paras.length){ toast('Hãy chọn 1 chương hoặc dán truyện trước.'); return; }
+  if (S.playing){ stopSpeak(); } else speakFrom(S.sentIdx);
+});
+$('btnBack10').addEventListener('click', function(){ if (S.paras.length) speakFrom(S.sentIdx-1); });
+$('btnFwd10').addEventListener('click', function(){ if (S.paras.length) speakFrom(S.sentIdx+1); });
+$('btnPrevChap').addEventListener('click', function(){
+  if (S.mode==='lib' && S.book && S.chapIdx>0) openChapter(S.book, S.chapIdx-1, S.playing); });
+$('btnNextChap').addEventListener('click', function(){
+  if (S.mode==='lib' && S.book && S.chapIdx<S.book.chapters.length-1) openChapter(S.book, S.chapIdx+1, S.playing); });
+$('btnTimer').addEventListener('click', function(){
+  var opts=[0,15,30,45,60];
+  var cur = S.timerEnd ? Math.max(0, Math.round((S.timerEnd-Date.now())/60000)) : 0;
+  var i = opts.indexOf(cur); if (i<0) i=0;
+  var next = opts[(i+1)%opts.length];
+  clearTimeout(S.timer); S.timerEnd = 0;
+  if (next>0){ S.timerEnd = Date.now()+next*60000;
+    S.timer = setTimeout(function(){ stopSpeak(); toast('Đã hết giờ hẹn, tắt đọc. 😴'); }, next*60000);
+    toast('Hẹn tắt sau ' + next + ' phút ⏱');
+  } else toast('Đã hủy hẹn giờ');
+});
+
+// ================= Mở chương =================
+function renderReader(title, text){
+  $('readerTitle').textContent = title;
+  var rd = $('reader'); rd.innerHTML='';
+  S.paras = splitSentences(text);
+  S.paras.forEach(function(s,i){
+    var p=document.createElement('p'); p.textContent=s;
+    p.addEventListener('click', function(){ speakFrom(i); });
+    rd.appendChild(p);
+  });
+  show('viewRead');
+  $('nowTitle').innerHTML = 'Đang mở: <b>' + title + '</b> · ' + S.paras.length + ' câu';
+}
+function openChapter(book, idx, autoplay){
+  stopSpeak();
+  S.book = book; S.chapIdx = idx; S.mode='lib';
+  var ch = book.chapters[idx];
+  $('nowTitle').innerHTML = 'Đang tải: <b>' + ch.title + '</b>…';
+  fetch(ch.file).then(function(r){ return r.text(); }).then(function(txt){
+    renderReader(book.title + ' — ' + ch.title, txt);
+    S.sentIdx = 0;
+    var pos = loadPos();
+    if (pos && pos.book===book.id && pos.chap===idx && pos.sent>0) S.sentIdx = Math.min(pos.sent, S.paras.length-1);
+    highlight(); savePos();
+    if (autoplay) speakFrom(S.sentIdx);
+  }).catch(function(){ toast('Không tải được chương này. Kiểm tra mạng rồi thử lại.'); });
+}
+
+// ================= Thư viện =================
+var LIB = [];
+function show(id){
+  ['viewLib','viewPaste','viewRead'].forEach(function(v){ $(v).classList.toggle('hidden', v!==id); });
+  window.scrollTo(0,0);
+}
+function renderBooks(){
+  var wrap=$('bookList'); wrap.innerHTML='';
+  if (!LIB.length){ wrap.innerHTML='<p class="note">Thư viện đang trống. Ông chủ gửi em link truyện muốn nghe, em tải về chia chương rồi đưa lên đây. Trong lúc chờ, dùng tab “Dán truyện” để nghe bất kỳ truyện nào ngay.</p>'; return; }
+  LIB.forEach(function(b){
+    var d=document.createElement('div'); d.className='book';
+    d.innerHTML='<div><b></b><span></span></div>';
+    d.querySelector('b').textContent=b.title;
+    d.querySelector('span').textContent=b.chapters.length + ' chương' + (b.author ? ' · ' + b.author : '');
+    var btn=document.createElement('button'); btn.className='go'; btn.textContent='Mở ▸';
+    btn.addEventListener('click', function(){ renderChapters(b); });
+    d.appendChild(btn); wrap.appendChild(d);
+  });
+}
+function renderChapters(b){
+  $('bookList').classList.add('hidden'); $('chapWrap').classList.remove('hidden');
+  $('bookTitle').textContent = b.title;
+  var wrap=$('chapList'); wrap.innerHTML='';
+  var pos = loadPos();
+  b.chapters.forEach(function(ch,i){
+    var d=document.createElement('div'); d.className='chap' + (pos && pos.book===b.id && pos.chap===i ? ' now':'');
+    var left=document.createElement('b'); left.textContent=ch.title;
+    d.appendChild(left);
+    if (pos && pos.book===b.id && pos.chap===i && pos.sent>0){
+      var s=document.createElement('span'); s.className='pos'; s.textContent='đang nghe dở ▸'; d.appendChild(s); }
+    d.addEventListener('click', function(){ openChapter(b, i, true); });
+    wrap.appendChild(d);
+  });
+  window.scrollTo(0,0);
+}
+$('btnBackBooks').addEventListener('click', function(){
+  $('chapWrap').classList.add('hidden'); $('bookList').classList.remove('hidden'); });
+$('btnBackLib').addEventListener('click', function(){ show('viewLib'); });
+fetch('books.json').then(function(r){ return r.json(); }).then(function(j){
+  LIB = j.books || []; renderBooks();
+}).catch(function(){ LIB=[]; renderBooks(); });
+
+// ================= Tabs + dán truyện =================
+$('tabLib').addEventListener('click', function(){ this.classList.add('on'); $('tabPaste').classList.remove('on'); show('viewLib'); });
+$('tabPaste').addEventListener('click', function(){ this.classList.add('on'); $('tabLib').classList.remove('on'); show('viewPaste'); });
+$('btnPasteRead').addEventListener('click', function(){
+  var txt = $('pasteBox').value.trim();
+  if (txt.length < 20){ toast('Dán thêm nội dung truyện vào đã nhé.'); return; }
+  stopSpeak(); S.mode='paste'; S.book=null; S.chapIdx=-1;
+  renderReader('Truyện dán vào', txt);
+  speakFrom(0);
+});
+$('fileTxt').addEventListener('change', function(){
+  var f = this.files[0]; if (!f) return;
+  var rd = new FileReader();
+  rd.onload = function(){ $('pasteBox').value = rd.result; toast('Đã nạp file: ' + f.name); };
+  rd.readAsText(f);
+});
+// Chạm vào 1 câu trong màn đọc = đọc từ câu đó (gắn trong renderReader)
+// Giữ màn hình không tắt khi đang đọc (nếu máy hỗ trợ)
+var wakeLock=null;
+document.addEventListener('visibilitychange', function(){
+  if (S.playing && document.visibilityState==='visible' && navigator.wakeLock){
+    navigator.wakeLock.request('screen').then(function(w){ wakeLock=w; }).catch(function(){});
+  }
+});
+setInterval(function(){ // Chrome Android hay tự ngắt utterance dài — watchdog nối lại
+  if (S.playing && !speechSynthesis.speaking && !speechSynthesis.pending){
+    if (S.sentIdx < S.paras.length) speakFrom(S.sentIdx);
+  }
+}, 4000);
+</script>
+</body>
+</html>
