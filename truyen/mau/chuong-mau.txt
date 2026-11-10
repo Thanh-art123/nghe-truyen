@@ -1,0 +1,7 @@
+Đây là chương mẫu để nghe thử giọng đọc của app Đại Thiên Tông.
+
+Ông chủ bấm nút play ở thanh dưới cùng, máy sẽ tự đọc từng câu một. Câu đang đọc sẽ được tô sáng để dễ theo dõi. Chạm vào bất kỳ câu nào trên màn hình, máy sẽ đọc lại từ câu đó.
+
+Muốn đổi giọng, ông chủ chọn trong ô Giọng đọc ở thanh dưới. Muốn đọc nhanh hơn hoặc chậm hơn, kéo thanh Tốc độ. Nút đồng hồ là hẹn giờ tắt, hợp khi nghe truyện trước lúc ngủ.
+
+Khi có truyện thật, ông chủ gửi link cho Đại Yêu. Đại Yêu sẽ tải về, chia thành từng chương và đưa vào thư viện của app này. Ông chủ chỉ việc mở app, chọn truyện, chọn chương và bấm nghe.
