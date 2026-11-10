@@ -184,8 +184,16 @@ function idbDel(id){ return idbOpen().then(function(db){ return new Promise(func
 
 // ================= Giọng đọc =================
 function voiceSort(a,b){ var av=/vi|viet/i.test(a.lang+' '+a.name)?0:1, bv=/vi|viet/i.test(b.lang+' '+b.name)?0:1; return av-bv; }
+var voiceTries = 0;
 function refreshVoices(){
   voices = speechSynthesis.getVoices();
+  if (!voices.length && voiceTries < 12){
+    voiceTries++;
+    var sel0 = $('selVoice');
+    if (!sel0.options.length) sel0.innerHTML = '<option>Đang tải giọng…</option>';
+    setTimeout(refreshVoices, 700);
+    return;
+  }
   var sel = $('selVoice'); sel.innerHTML='';
   var sorted = voices.slice().sort(voiceSort);
   sorted.forEach(function(v,i){
@@ -287,7 +295,10 @@ function nextChapterOrStop(){
 }
 $('btnPlay').addEventListener('click', function(){
   if (!S.paras.length){ toast('Hãy chọn 1 chương hoặc dán truyện trước.'); return; }
-  if (S.playing){ stopSpeak(); } else speakFrom(S.sentIdx);
+  if (S.playing){ stopSpeak(); } else {
+    if (!voices.length) toast('Máy chưa nạp được giọng đọc — ông chủ thử mở app bằng Chrome, hoặc kiểm tra Google TTS tiếng Việt trong Cài đặt máy.');
+    speakFrom(S.sentIdx);
+  }
 });
 $('btnBack10').addEventListener('click', function(){ if (S.paras.length) speakFrom(S.sentIdx-1); });
 $('btnFwd10').addEventListener('click', function(){ if (S.paras.length) speakFrom(S.sentIdx+1); });
@@ -483,6 +494,8 @@ document.addEventListener('visibilitychange', function(){
     navigator.wakeLock.request('screen').catch(function(){});
   }
 });
+// Đăng ký service worker (để cài thành app thật + nghe offline phần đã tải)
+if ('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(function(){}); }
 setInterval(function(){ // Chrome Android hay tự ngắt utterance dài — watchdog nối lại
   if (S.playing && !speechSynthesis.speaking && !speechSynthesis.pending){
     if (S.sentIdx < S.paras.length) speakFrom(S.sentIdx);
