@@ -139,6 +139,9 @@
       <label style="flex:.8">Tốc độ <span id="rateVal">1.0×</span>
         <input type="range" id="rngRate" min="0.7" max="1.6" step="0.05" value="1">
       </label>
+      <label style="flex:.8">Âm lượng <span id="volVal">100%</span>
+        <input type="range" id="rngVol" min="0" max="100" step="5" value="100">
+      </label>
     </div>
   </div>
 </div>
@@ -148,7 +151,7 @@
 // ================= Trạng thái =================
 var S = {
   book: null, chapIdx: -1, paras: [], sentIdx: 0,
-  playing: false, voice: null, rate: 1.0, timer: null, timerEnd: 0,
+  playing: false, voice: null, rate: 1.0, vol: 1.0, timer: null, timerEnd: 0,
   mode: 'lib' // lib | paste
 };
 var voices = [];
@@ -261,6 +264,7 @@ function speakFrom(idx){
   if (S.voice) u.voice = S.voice;
   u.lang = (S.voice && S.voice.lang) || 'vi-VN';
   u.rate = S.rate;
+  u.volume = S.vol;
   u.onend = function(){
     if (!S.playing) return;
     if (S.sentIdx < S.paras.length - 1) speakFrom(S.sentIdx + 1);
@@ -303,7 +307,21 @@ $('btnTimer').addEventListener('click', function(){
   } else toast('Đã hủy hẹn giờ');
 });
 // Nhạc nền
-var bgm = $('bgm'); bgm.volume = 0.16;
+var bgm = $('bgm');
+function applyVol(){ bgm.volume = 0.16 * S.vol; }
+var savedVol = parseFloat(localStorage.getItem('nghe_truyen_vol'));
+if (!isNaN(savedVol) && savedVol >= 0 && savedVol <= 1){
+  S.vol = savedVol; $('rngVol').value = Math.round(savedVol * 100);
+  $('volVal').textContent = Math.round(savedVol * 100) + '%';
+}
+applyVol();
+$('rngVol').addEventListener('input', function(){
+  S.vol = (+this.value) / 100;
+  $('volVal').textContent = this.value + '%';
+  localStorage.setItem('nghe_truyen_vol', String(S.vol));
+  applyVol();
+  if (S.playing) speakFrom(S.sentIdx);
+});
 $('btnMusic').addEventListener('click', function(){
   if (bgm.paused){
     bgm.play().then(function(){ $('btnMusic').classList.add('lit'); toast('Đã bật nhạc nền 🎵'); })
