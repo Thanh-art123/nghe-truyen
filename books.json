@@ -27,44 +27,40 @@
           "title": "Chương 3: Đêm Đầu Tiên"
         },
         {
-          "title": "Chương 4: Hang Đá Cũ",
-          "file": "truyen/truong-da/chuong-4.txt"
+          "file": "truyen/truong-da/chuong-4.txt",
+          "title": "Chương 4: Hang Đá Cũ"
         },
         {
-          "title": "Chương 5: Làng Dưới Chân Núi",
-          "file": "truyen/truong-da/chuong-5.txt"
+          "file": "truyen/truong-da/chuong-5.txt",
+          "title": "Chương 5: Làng Dưới Chân Núi"
         },
         {
-          "title": "Chương 6: Thiên Phú",
-          "file": "truyen/truong-da/chuong-6.txt"
+          "file": "truyen/truong-da/chuong-6.txt",
+          "title": "Chương 6: Thiên Phú"
         },
         {
-          "title": "Chương 7: Giăng Bẫy",
-          "file": "truyen/truong-da/chuong-7.txt"
+          "file": "truyen/truong-da/chuong-7.txt",
+          "title": "Chương 7: Giăng Bẫy"
         },
         {
-          "title": "Chương 8: Con Ong Bay Thẳng",
-          "file": "truyen/truong-da/chuong-8.txt"
+          "file": "truyen/truong-da/chuong-8.txt",
+          "title": "Chương 8: Con Ong Bay Thẳng"
         },
         {
-          "title": "Chương 9: Mật Khẩu Và Bẫy Nổ",
-          "file": "truyen/truong-da/chuong-9.txt"
+          "file": "truyen/truong-da/chuong-9.txt",
+          "title": "Chương 9: Mật Khẩu Và Bẫy Nổ"
         },
         {
-          "title": "Chương 10: Giai Đoạn Hai — Vây Núi",
-          "file": "truyen/truong-da/chuong-10.txt"
+          "file": "truyen/truong-da/chuong-10.txt",
+          "title": "Chương 10: Giai Đoạn Hai — Vây Núi"
         },
         {
-          "title": "Chương 11: Sau Trận Đánh",
-          "file": "truyen/truong-da/chuong-11.txt"
+          "file": "truyen/truong-da/chuong-11.txt",
+          "title": "Chương 11: Sau Trận Đánh"
         },
         {
-          "title": "Chương 12: Đạo Sĩ Lên Núi",
-          "file": "truyen/truong-da/chuong-12.txt"
-        },
-        {
-          "file": "truyen/truong-da/chuong-13.txt",
-          "title": "Chương 13: Kiểm Thử Đồng Bộ"
+          "file": "truyen/truong-da/chuong-12.txt",
+          "title": "Chương 12: Đạo Sĩ Lên Núi"
         }
       ],
       "id": "thinh-kinh-chi-lo",
@@ -80,6 +76,146 @@
         {
           "file": "truyen/huyen-kinh-tien-toc/chuong-2.txt",
           "title": "Chương 2"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-3.txt",
+          "title": "Chương 3"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-4.txt",
+          "title": "Chương 4"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-5.txt",
+          "title": "Chương 5"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-6.txt",
+          "title": "Chương 6"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-7.txt",
+          "title": "Chương 7"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-8.txt",
+          "title": "Chương 8"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-9.txt",
+          "title": "Chương 9"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-10.txt",
+          "title": "Chương 10"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-11.txt",
+          "title": "Chương 11"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-12.txt",
+          "title": "Chương 12"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-13.txt",
+          "title": "Chương 13"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-14.txt",
+          "title": "Chương 14"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-15.txt",
+          "title": "Chương 15"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-16.txt",
+          "title": "Chương 16"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-17.txt",
+          "title": "Chương 17"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-18.txt",
+          "title": "Chương 18"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-19.txt",
+          "title": "Chương 19"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-20.txt",
+          "title": "Chương 20"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-21.txt",
+          "title": "Chương 21"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-22.txt",
+          "title": "Chương 22"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-23.txt",
+          "title": "Chương 23"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-24.txt",
+          "title": "Chương 24"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-25.txt",
+          "title": "Chương 25"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-26.txt",
+          "title": "Chương 26"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-27.txt",
+          "title": "Chương 27"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-28.txt",
+          "title": "Chương 28"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-29.txt",
+          "title": "Chương 29"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-30.txt",
+          "title": "Chương 30"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-31.txt",
+          "title": "Chương 31"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-32.txt",
+          "title": "Chương 32"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-33.txt",
+          "title": "Chương 33"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-34.txt",
+          "title": "Chương 34"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-35.txt",
+          "title": "Chương 35"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-36.txt",
+          "title": "Chương 36"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-37.txt",
+          "title": "Chương 37"
         },
         {
           "file": "truyen/huyen-kinh-tien-toc/chuong-38.txt",
@@ -124,6 +260,202 @@
         {
           "file": "truyen/huyen-kinh-tien-toc/chuong-48.txt",
           "title": "Chương 48"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-49.txt",
+          "title": "Chương 49"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-50.txt",
+          "title": "Chương 50"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-51.txt",
+          "title": "Chương 51"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-52.txt",
+          "title": "Chương 52"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-53.txt",
+          "title": "Chương 53"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-54.txt",
+          "title": "Chương 54"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-55.txt",
+          "title": "Chương 55"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-56.txt",
+          "title": "Chương 56"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-57.txt",
+          "title": "Chương 57"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-58.txt",
+          "title": "Chương 58"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-59.txt",
+          "title": "Chương 59"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-60.txt",
+          "title": "Chương 60"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-61.txt",
+          "title": "Chương 61"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-62.txt",
+          "title": "Chương 62"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-63.txt",
+          "title": "Chương 63"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-64.txt",
+          "title": "Chương 64"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-65.txt",
+          "title": "Chương 65"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-66.txt",
+          "title": "Chương 66"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-67.txt",
+          "title": "Chương 67"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-68.txt",
+          "title": "Chương 68"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-69.txt",
+          "title": "Chương 69"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-70.txt",
+          "title": "Chương 70"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-71.txt",
+          "title": "Chương 71"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-72.txt",
+          "title": "Chương 72"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-73.txt",
+          "title": "Chương 73"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-74.txt",
+          "title": "Chương 74"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-75.txt",
+          "title": "Chương 75"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-76.txt",
+          "title": "Chương 76"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-77.txt",
+          "title": "Chương 77"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-78.txt",
+          "title": "Chương 78"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-79.txt",
+          "title": "Chương 79"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-80.txt",
+          "title": "Chương 80"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-81.txt",
+          "title": "Chương 81"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-82.txt",
+          "title": "Chương 82"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-83.txt",
+          "title": "Chương 83"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-84.txt",
+          "title": "Chương 84"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-85.txt",
+          "title": "Chương 85"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-86.txt",
+          "title": "Chương 86"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-87.txt",
+          "title": "Chương 87"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-88.txt",
+          "title": "Chương 88"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-89.txt",
+          "title": "Chương 89"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-90.txt",
+          "title": "Chương 90"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-91.txt",
+          "title": "Chương 91"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-92.txt",
+          "title": "Chương 92"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-93.txt",
+          "title": "Chương 93"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-94.txt",
+          "title": "Chương 94"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-95.txt",
+          "title": "Chương 95"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-96.txt",
+          "title": "Chương 96"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-97.txt",
+          "title": "Chương 97"
         }
       ],
       "id": "huyen-kinh-tien-toc",
