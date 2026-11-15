@@ -12,13 +12,16 @@
     --text:#f3e9d7; --dim:#b9a888; --line:#3d2b1a; --accent:#b3392e;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);height:100%;
     font-family:-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;}
+  body{display:flex;flex-direction:column;min-height:100dvh}
   header{position:sticky;top:0;z-index:5;background:linear-gradient(180deg,#241207,#1a0f0a);
     border-bottom:1px solid var(--line);padding:12px 14px 10px;text-align:center}
   header h1{margin:0;font-size:19px;letter-spacing:2px;color:var(--gold);font-weight:800}
   header p{margin:2px 0 0;font-size:12px;color:var(--dim)}
-  main{max-width:720px;margin:0 auto;padding:12px 12px 200px}
+  main{flex:1;display:flex;flex-direction:column;justify-content:center;width:100%;
+    max-width:720px;margin:0 auto;padding:12px 12px 200px}
+  main.top{justify-content:flex-start}
   .tabs{display:flex;gap:8px;margin:4px 0 12px}
   .tabs button{flex:1;padding:11px;border-radius:10px;border:1px solid var(--line);
     background:var(--panel);color:var(--text);font-size:15px;font-weight:600}
@@ -44,11 +47,12 @@
   .rowbtn button,.filebtn{flex:1;padding:12px;border-radius:10px;border:1px solid var(--line);
     background:var(--panel2);color:var(--text);font-size:15px;font-weight:600;text-align:center}
   .rowbtn button.primary{background:var(--gold);color:#241207;border-color:var(--gold)}
-  #reader{line-height:1.85;font-size:18px;padding:4px 2px}
-  #reader p{margin:0 0 14px;color:#d9cbb2}
-  #reader p.active{color:#fff;background:rgba(232,179,75,.13);border-radius:6px;
-    box-shadow:0 0 0 6px rgba(232,179,75,.13)}
-  #readerTitle{font-size:19px;color:var(--gold);margin:6px 0 12px}
+  .radioBox{text-align:center;padding:18px 6px 8px}
+  .radioIcon{font-size:72px;line-height:1.1}
+  #readerTitle{font-size:20px;color:var(--gold);margin:12px 0 4px;line-height:1.4}
+  #radioProg{height:9px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:18px 2px 10px}
+  #radioBar{height:100%;width:0;background:linear-gradient(90deg,var(--gold2),var(--gold))}
+  #radioStat{color:var(--dim);font-size:14px}
   /* ------- player bar ------- */
   #player{position:fixed;left:0;right:0;bottom:0;z-index:9;background:#120b06f2;
     border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
@@ -113,8 +117,12 @@
   <!-- Màn đọc -->
   <section id="viewRead" class="hidden">
     <button class="backbtn" id="btnBackLib">← Quay lại</button>
-    <h3 id="readerTitle"></h3>
-    <div id="reader"></div>
+    <div class="radioBox">
+      <div class="radioIcon">🎧</div>
+      <h3 id="readerTitle"></h3>
+      <div id="radioProg"><div id="radioBar"></div></div>
+      <div id="radioStat"></div>
+    </div>
   </section>
 </main>
 
@@ -182,10 +190,41 @@ function idbDel(id){ return idbOpen().then(function(db){ return new Promise(func
   var rq = db.transaction('books','readwrite').objectStore('books').delete(id);
   rq.onsuccess = function(){ res(); }; rq.onerror = function(){ rej(rq.error); }; }); }); }
 
-// ================= Giọng đọc =================
+// ================= Giọng đọc (web: speechSynthesis · app APK: plugin native) =================
+var NT = null;
+try { NT = (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.TextToSpeech) || null; } catch(e){}
+var ENGINE = NT ? 'native' : 'web';
 function voiceSort(a,b){ var av=/vi|viet/i.test(a.lang+' '+a.name)?0:1, bv=/vi|viet/i.test(b.lang+' '+b.name)?0:1; return av-bv; }
 var voiceTries = 0;
+function fillVoices(){
+  var sel = $('selVoice'); sel.innerHTML='';
+  var sorted = voices.slice().sort(voiceSort);
+  sorted.forEach(function(v,i){
+    var o=document.createElement('option'); o.value=i;
+    o.textContent = v.name + (v.lang ? ' (' + v.lang + ')' : '');
+    sel.appendChild(o); });
+  var saved = null;
+  try { saved = localStorage.getItem('nghe_truyen_voice'); } catch(e){}
+  var pick = 0;
+  sorted.forEach(function(v,i){ if (v.name===saved) pick=i; });
+  if (sorted.length){ S.voice = sorted[pick]; S.voiceIdx = voices.indexOf(sorted[pick]); sel.value = pick; }
+}
+function fallbackToWeb(){
+  if (ENGINE !== 'native') return;
+  if ('speechSynthesis' in window){ ENGINE = 'web'; voiceTries = 0; refreshVoices(); }
+}
 function refreshVoices(){
+  if (ENGINE === 'native'){
+    try {
+      NT.getVoices().then(function(r){
+        voices = (r && r.voices) || [];
+        if (!voices.length && voiceTries < 6){ voiceTries++; setTimeout(refreshVoices, 800); var s0=$('selVoice'); if(!s0.options.length) s0.innerHTML='<option>Đang tải giọng…</option>'; return; }
+        if (!voices.length) return fallbackToWeb();
+        fillVoices();
+      }).catch(function(){ if (voiceTries < 6){ voiceTries++; setTimeout(refreshVoices, 800); } else fallbackToWeb(); });
+    } catch(e){ fallbackToWeb(); }
+    return;
+  }
   voices = speechSynthesis.getVoices();
   if (!voices.length && voiceTries < 12){
     voiceTries++;
@@ -194,27 +233,20 @@ function refreshVoices(){
     setTimeout(refreshVoices, 700);
     return;
   }
-  var sel = $('selVoice'); sel.innerHTML='';
-  var sorted = voices.slice().sort(voiceSort);
-  sorted.forEach(function(v,i){
-    var o=document.createElement('option'); o.value=i;
-    o.textContent = v.name + ' (' + v.lang + ')';
-    sel.appendChild(o); });
-  var saved = localStorage.getItem('nghe_truyen_voice');
-  var pick = 0;
-  sorted.forEach(function(v,i){ if (v.name===saved) pick=i; });
-  if (sorted.length){ S.voice = sorted[pick]; sel.value = pick; }
+  fillVoices();
 }
-if ('speechSynthesis' in window){
+if (ENGINE === 'native'){ setTimeout(function(){ try { refreshVoices(); } catch(e){ fallbackToWeb(); } }, 400); }
+else if ('speechSynthesis' in window){
   refreshVoices();
   speechSynthesis.onvoiceschanged = refreshVoices;
 } else {
-  toast('Trình duyệt này không có giọng đọc. Hãy mở bằng Chrome trên điện thoại.');
+  toast('Thiết bị này không có giọng đọc.');
 }
 $('selVoice').addEventListener('change', function(){
   var sorted = voices.slice().sort(voiceSort);
   S.voice = sorted[+this.value];
-  if (S.voice) localStorage.setItem('nghe_truyen_voice', S.voice.name);
+  S.voiceIdx = S.voice ? voices.indexOf(S.voice) : null;
+  if (S.voice) try { localStorage.setItem('nghe_truyen_voice', S.voice.name); } catch(e){}
   if (S.playing) speakFrom(S.sentIdx);
 });
 $('rngRate').addEventListener('input', function(){
@@ -255,38 +287,71 @@ function splitChapters(text){
 }
 
 // ================= Đọc =================
-function stopSpeak(){ speechSynthesis.cancel(); S.playing=false; $('btnPlay').textContent='▶'; }
+function stopSpeak(){
+  seq++;
+  if (ENGINE === 'native'){ try { NT.stop(); } catch(e){} } else { speechSynthesis.cancel(); }
+  S.playing=false; $('btnPlay').textContent='▶';
+}
 function nowText(){
   if (!S.book) return 'Đang nghe truyện dán vào';
   return '<b>' + S.book.title + '</b> · ' + S.book.chapters[S.chapIdx].title +
          ' · câu ' + (S.sentIdx+1) + '/' + S.paras.length;
 }
+var seq = 0; // mã phiên đọc — tăng mỗi lần đổi/dừng để cắt vòng chờ cũ (native)
+function estimateMs(text){ return Math.max(500, text.length / (12.5 * (S.rate || 1)) * 1000); }
+function waitSlice(ms, token){
+  return new Promise(function(res){
+    var left = ms;
+    (function step(){
+      if (token !== seq || !S.playing || left <= 0) return res();
+      var d = Math.min(150, left); left -= d; setTimeout(step, d);
+    })();
+  });
+}
+function advance(token){
+  if (token !== seq || !S.playing) return;
+  if (S.sentIdx < S.paras.length - 1) speakFrom(S.sentIdx + 1);
+  else nextChapterOrStop();
+}
+function nativeSpeak(text, token){
+  try { NT.stop(); } catch(e){}
+  setTimeout(function(){
+    if (token !== seq || !S.playing) return;
+    var t0 = Date.now();
+    var opts = { text: text, lang: (S.voice && S.voice.lang) || 'vi-VN', rate: S.rate, pitch: 1.0, volume: S.vol, queue: false };
+    if (S.voiceIdx != null && S.voiceIdx >= 0) opts.voice = S.voiceIdx;
+    NT.speak(opts).then(function(){
+      if (token !== seq || !S.playing) return;
+      var wait = estimateMs(text) * 0.92 - (Date.now() - t0);
+      if (wait > 150) waitSlice(Math.min(wait, 25000), token).then(function(){ advance(token); });
+      else advance(token);
+    }).catch(function(){ advance(token); });
+  }, 60);
+}
 function speakFrom(idx){
   if (!S.paras.length) return;
-  speechSynthesis.cancel();
   S.sentIdx = Math.max(0, Math.min(idx, S.paras.length-1));
   S.playing = true; $('btnPlay').textContent='⏸';
   $('nowTitle').innerHTML = nowText();
   highlight(); savePos();
-  var u = new SpeechSynthesisUtterance(S.paras[S.sentIdx]);
+  var token = ++seq;
+  var text = S.paras[S.sentIdx];
+  if (ENGINE === 'native'){ nativeSpeak(text, token); return; }
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(text);
   if (S.voice) u.voice = S.voice;
   u.lang = (S.voice && S.voice.lang) || 'vi-VN';
   u.rate = S.rate;
   u.volume = S.vol;
-  u.onend = function(){
-    if (!S.playing) return;
-    if (S.sentIdx < S.paras.length - 1) speakFrom(S.sentIdx + 1);
-    else nextChapterOrStop();
-  };
-  u.onerror = function(e){ if (e.error !== 'canceled' && e.error !== 'interrupted') {
-    if (S.playing && S.sentIdx < S.paras.length-1) speakFrom(S.sentIdx+1); } };
+  u.onend = function(){ advance(token); };
+  u.onerror = function(e){ if (e.error !== 'canceled' && e.error !== 'interrupted') advance(token); };
   speechSynthesis.speak(u);
 }
 function highlight(){
-  var ps = $('reader').children;
-  for (var i=0;i<ps.length;i++) ps[i].classList.toggle('active', i===S.sentIdx);
-  var el = ps[S.sentIdx];
-  if (el) el.scrollIntoView({block:'center', behavior:'smooth'});
+  var total = S.paras ? S.paras.length : 0;
+  var st = $('radioStat'), bar = $('radioBar');
+  if (st) st.textContent = total ? ('Câu ' + (S.sentIdx+1) + ' / ' + total) : '';
+  if (bar) bar.style.width = total ? Math.round((S.sentIdx+1)/total*100) + '%' : '0%';
 }
 function nextChapterOrStop(){
   if (S.mode==='lib' && S.book && S.chapIdx < S.book.chapters.length-1){
@@ -340,18 +405,26 @@ $('btnMusic').addEventListener('click', function(){
   } else { bgm.pause(); $('btnMusic').classList.remove('lit'); toast('Đã tắt nhạc nền'); }
 });
 
+// Lấy nội dung 1 chương của kho sẵn: ưu tiên bản đã lưu trong máy (nghe offline),
+// thiếu thì lấy bản đóng sẵn trong app, vẫn thiếu thì tải từ kho trực tuyến rồi lưu lại.
+function fetchChapterText(ch){
+  var ck = 'nt_ch_' + ch.file;
+  var cached = null;
+  try { cached = localStorage.getItem(ck); } catch(e){}
+  if (cached) return Promise.resolve(cached);
+  function ok(r){ if (!r.ok) throw new Error('http ' + r.status); return r.text(); }
+  function keep(t){ try { localStorage.setItem(ck, t); } catch(e){} return t; }
+  return fetch(ch.file).then(ok)
+    .catch(function(){ return fetch(LIB_BASE + ch.file).then(ok); })
+    .then(keep);
+}
+
 // ================= Mở chương =================
 function renderReader(title, text){
   $('readerTitle').textContent = title;
-  var rd = $('reader'); rd.innerHTML='';
   S.paras = splitSentences(text);
-  S.paras.forEach(function(s,i){
-    var p=document.createElement('p'); p.textContent=s;
-    p.addEventListener('click', function(){ speakFrom(i); });
-    rd.appendChild(p);
-  });
   show('viewRead');
-  $('nowTitle').innerHTML = 'Đang mở: <b>' + title + '</b> · ' + S.paras.length + ' câu';
+  $('nowTitle').innerHTML = 'Đang nghe: <b>' + title + '</b>';
 }
 function openChapter(book, idx, autoplay){
   stopSpeak();
@@ -368,7 +441,7 @@ function openChapter(book, idx, autoplay){
   if (typeof ch.text === 'string') done(ch.text);
   else {
     $('nowTitle').innerHTML = 'Đang tải: <b>' + ch.title + '</b>…';
-    fetch(ch.file).then(function(r){ return r.text(); }).then(done)
+    fetchChapterText(ch).then(done)
     .catch(function(){ toast('Không tải được chương này. Kiểm tra mạng rồi thử lại.'); });
   }
 }
@@ -376,6 +449,11 @@ function openChapter(book, idx, autoplay){
 // ================= Kho truyện =================
 var LIB = [];      // truyện có sẵn trên GitHub
 var LOCAL = [];    // truyện người dùng tải lên (IndexedDB)
+// Nguồn kho trực tuyến: app tự lấy danh sách + chương mới từ đây, không cần cài lại app.
+// (Cho phép ghi đè bằng localStorage 'nghe_truyen_libsrc' để kiểm thử.)
+var LIB_BASE = 'https://thanh-art123.github.io/nghe-truyen/';
+try { var _ls = localStorage.getItem('nghe_truyen_libsrc'); if (_ls) LIB_BASE = _ls; } catch(e){}
+if (LIB_BASE.slice(-1) !== '/') LIB_BASE += '/';
 function show(id){
   ['viewLib','viewUp','viewRead'].forEach(function(v){ $(v).classList.toggle('hidden', v!==id); });
   window.scrollTo(0,0);
@@ -431,9 +509,30 @@ function refreshLocal(){
   return idbAll().then(function(list){ LOCAL = list || []; renderBooks(); })
   .catch(function(){ LOCAL = []; renderBooks(); });
 }
+// Nạp kho sẵn theo 3 lớp, lớp sau mới hơn lớp trước (chỉ nhận khi mới hơn, tránh bản cũ về sau đè bản mới):
+// 1) bản đóng sẵn trong app — mở tức thì, không cần mạng · 2) bản đã đồng bộ lần trước · 3) bản mới nhất trên mạng.
+var _libStamp = -1;
+function setLIB(books, stamp){
+  if (stamp < _libStamp) return;
+  _libStamp = stamp;
+  LIB = books || [];
+  renderBooks();
+}
 fetch('books.json').then(function(r){ return r.json(); }).then(function(j){
-  LIB = j.books || []; renderBooks();
-}).catch(function(){ LIB=[]; renderBooks(); });
+  setLIB(j.books || [], 0);
+}).catch(function(){ setLIB([], 0); });
+try {
+  var _lc = localStorage.getItem('nghe_truyen_lib_cache');
+  if (_lc) setLIB(JSON.parse(_lc), 1);
+} catch(e){}
+fetch(LIB_BASE + 'books.json?ts=' + Date.now(), { cache: 'no-store' })
+.then(function(r){ if (!r.ok) throw new Error('http'); return r.json(); })
+.then(function(j){
+  if (j && j.books && j.books.length){
+    try { localStorage.setItem('nghe_truyen_lib_cache', JSON.stringify(j.books)); } catch(e){}
+    setLIB(j.books, 2);
+  }
+}).catch(function(){});
 refreshLocal();
 
 // ================= Tabs + tải lên =================
@@ -488,6 +587,21 @@ $('btnHearNow').addEventListener('click', function(){
   if (!book){ toast('Hãy dán nội dung truyện hoặc chọn file .txt trước.'); return; }
   stopSpeak(); openChapter(book, 0, true);
 });
+// Cầu nối cho bản PC (Electron): cho phép thanh công cụ PC lấy chương đang nghe để tải MP3.
+// Trên web/điện thoại không ai gọi tới, vô hại.
+window.NT_API = {
+  current: function(){
+    if (!S.book || S.chapIdx == null || !S.paras || !S.paras.length) return null;
+    return { name: S.book.title + ' - ' + S.book.chapters[S.chapIdx].title, text: S.paras.join(' '), sentences: S.paras.slice() };
+  },
+  bookTitle: function(){ return S.book ? S.book.title : ''; },
+  chapters: function(){
+    if (!S.book) return [];
+    return S.book.chapters.map(function(c){
+      return { title: c.title, file: (typeof c.text === 'string') ? null : c.file, text: (typeof c.text === 'string') ? c.text : null };
+    });
+  }
+};
 // Giữ màn hình không tắt khi đang đọc (nếu máy hỗ trợ)
 document.addEventListener('visibilitychange', function(){
   if (S.playing && document.visibilityState==='visible' && navigator.wakeLock){
@@ -497,7 +611,7 @@ document.addEventListener('visibilitychange', function(){
 // Đăng ký service worker (để cài thành app thật + nghe offline phần đã tải)
 if ('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(function(){}); }
 setInterval(function(){ // Chrome Android hay tự ngắt utterance dài — watchdog nối lại
-  if (S.playing && !speechSynthesis.speaking && !speechSynthesis.pending){
+  if (ENGINE === 'web' && S.playing && !speechSynthesis.speaking && !speechSynthesis.pending){
     if (S.sentIdx < S.paras.length) speakFrom(S.sentIdx);
   }
 }, 4000);
