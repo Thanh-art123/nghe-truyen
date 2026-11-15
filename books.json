@@ -1,1 +1,133 @@
-{"books":[{"author":"Đại Thiên Tông","chapters":[{"file":"truyen/mau/chuong-mau.txt","title":"Chương mẫu"}],"id":"truyen-mau","title":"Truyện mẫu (nghe thử giọng)"},{"author":"","chapters":[{"file":"truyen/truong-da/chuong-1.txt","title":"Chương 1: Thỉnh Kinh Chi Lộ"},{"file":"truyen/truong-da/chuong-2.txt","title":"Chương 2: Thuộc Hạ Và Lãnh Địa"},{"file":"truyen/truong-da/chuong-3.txt","title":"Chương 3: Đêm Đầu Tiên"},{"title":"Chương 4: Hang Đá Cũ","file":"truyen/truong-da/chuong-4.txt"},{"title":"Chương 5: Làng Dưới Chân Núi","file":"truyen/truong-da/chuong-5.txt"}],"id":"thinh-kinh-chi-lo","title":"Thỉnh Kinh Chi Lộ"}]}
+{
+  "books": [
+    {
+      "author": "Đại Thiên Tông",
+      "chapters": [
+        {
+          "file": "truyen/mau/chuong-mau.txt",
+          "title": "Chương mẫu"
+        }
+      ],
+      "id": "truyen-mau",
+      "title": "Truyện mẫu (nghe thử giọng)"
+    },
+    {
+      "author": "",
+      "chapters": [
+        {
+          "file": "truyen/truong-da/chuong-1.txt",
+          "title": "Chương 1: Thỉnh Kinh Chi Lộ"
+        },
+        {
+          "file": "truyen/truong-da/chuong-2.txt",
+          "title": "Chương 2: Thuộc Hạ Và Lãnh Địa"
+        },
+        {
+          "file": "truyen/truong-da/chuong-3.txt",
+          "title": "Chương 3: Đêm Đầu Tiên"
+        },
+        {
+          "title": "Chương 4: Hang Đá Cũ",
+          "file": "truyen/truong-da/chuong-4.txt"
+        },
+        {
+          "title": "Chương 5: Làng Dưới Chân Núi",
+          "file": "truyen/truong-da/chuong-5.txt"
+        },
+        {
+          "title": "Chương 6: Thiên Phú",
+          "file": "truyen/truong-da/chuong-6.txt"
+        },
+        {
+          "title": "Chương 7: Giăng Bẫy",
+          "file": "truyen/truong-da/chuong-7.txt"
+        },
+        {
+          "title": "Chương 8: Con Ong Bay Thẳng",
+          "file": "truyen/truong-da/chuong-8.txt"
+        },
+        {
+          "title": "Chương 9: Mật Khẩu Và Bẫy Nổ",
+          "file": "truyen/truong-da/chuong-9.txt"
+        },
+        {
+          "title": "Chương 10: Giai Đoạn Hai — Vây Núi",
+          "file": "truyen/truong-da/chuong-10.txt"
+        },
+        {
+          "title": "Chương 11: Sau Trận Đánh",
+          "file": "truyen/truong-da/chuong-11.txt"
+        },
+        {
+          "title": "Chương 12: Đạo Sĩ Lên Núi",
+          "file": "truyen/truong-da/chuong-12.txt"
+        },
+        {
+          "file": "truyen/truong-da/chuong-13.txt",
+          "title": "Chương 13: Kiểm Thử Đồng Bộ"
+        }
+      ],
+      "id": "thinh-kinh-chi-lo",
+      "title": "Thỉnh Kinh Chi Lộ"
+    },
+    {
+      "author": "",
+      "chapters": [
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-1.txt",
+          "title": "Chương 1"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-2.txt",
+          "title": "Chương 2"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-38.txt",
+          "title": "Chương 38"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-39.txt",
+          "title": "Chương 39"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-40.txt",
+          "title": "Chương 40"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-41.txt",
+          "title": "Chương 41"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-42.txt",
+          "title": "Chương 42"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-43.txt",
+          "title": "Chương 43"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-44.txt",
+          "title": "Chương 44"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-45.txt",
+          "title": "Chương 45"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-46.txt",
+          "title": "Chương 46"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-47.txt",
+          "title": "Chương 47"
+        },
+        {
+          "file": "truyen/huyen-kinh-tien-toc/chuong-48.txt",
+          "title": "Chương 48"
+        }
+      ],
+      "id": "huyen-kinh-tien-toc",
+      "title": "Huyền Kính Tiên Tộc"
+    }
+  ]
+}
