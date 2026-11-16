@@ -482,6 +482,14 @@ function renderBooks(){
         }
       });
       row.appendChild(del);
+    } else {
+      var del2=document.createElement('button'); del2.className='del'; del2.textContent='🗑';
+      del2.addEventListener('click', function(){
+        if (confirm('Xóa truyện “' + b.title + '” khỏi app trên máy này? App sẽ không tự tải truyện này về máy này nữa. Kho online vẫn giữ nguyên, máy khác không bị ảnh hưởng.')){
+          deleteLibBook(b);
+        }
+      });
+      row.appendChild(del2);
     }
     d.appendChild(row); wrap.appendChild(d);
   });
@@ -509,13 +517,29 @@ function refreshLocal(){
   return idbAll().then(function(list){ LOCAL = list || []; renderBooks(); })
   .catch(function(){ LOCAL = []; renderBooks(); });
 }
+// Truyện đã xóa trên máy này: ghi nhớ danh sách id để mỗi lần đồng bộ không kéo lại.
+// Chỉ xóa khỏi máy này — kho online vẫn giữ nguyên, máy khác không bị ảnh hưởng.
+function deletedBookIds(){ try { return JSON.parse(localStorage.getItem('nt_deleted_books') || '[]'); } catch(e){ return []; } }
+function isDeletedBook(id){ return deletedBookIds().indexOf(id) >= 0; }
+function deleteLibBook(b){
+  var ids = deletedBookIds();
+  if (ids.indexOf(b.id) < 0){ ids.push(b.id); try { localStorage.setItem('nt_deleted_books', JSON.stringify(ids)); } catch(e){} }
+  (b.chapters || []).forEach(function(c){ if (c.file) try { localStorage.removeItem('nt_ch_' + c.file); } catch(e){} });
+  var pos = loadPos(); if (pos && pos.book === b.id){ try { localStorage.removeItem('nghe_truyen_pos'); } catch(e){} }
+  if (S.book && S.book.id === b.id){ stopSpeak(); S.book = null; S.chapIdx = -1; S.paras = []; }
+  LIB = LIB.filter(function(x){ return x.id !== b.id; });
+  renderBooks();
+  // Báo cho vỏ PC (nếu đang chạy trong app PC) để xóa luôn các file MP3 đã thu của truyện này
+  try { window.parent.postMessage({ type: 'nt-delete-book', id: b.id, title: b.title }, '*'); } catch(e){}
+  toast('Đã xóa “' + b.title + '” khỏi app trên máy này.');
+}
 // Nạp kho sẵn theo 3 lớp, lớp sau mới hơn lớp trước (chỉ nhận khi mới hơn, tránh bản cũ về sau đè bản mới):
 // 1) bản đóng sẵn trong app — mở tức thì, không cần mạng · 2) bản đã đồng bộ lần trước · 3) bản mới nhất trên mạng.
 var _libStamp = -1;
 function setLIB(books, stamp){
   if (stamp < _libStamp) return;
   _libStamp = stamp;
-  LIB = books || [];
+  LIB = (books || []).filter(function(b){ return !isDeletedBook(b.id); });
   renderBooks();
 }
 fetch('books.json').then(function(r){ return r.json(); }).then(function(j){

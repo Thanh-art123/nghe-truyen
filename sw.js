@@ -1,5 +1,5 @@
 // Đại Thiên Tông — Nghe Truyện: service worker cho cài app + nghe offline phần đã tải
-var CACHE = 'dtt-nghe-truyen-v2';
+var CACHE = 'dtt-nghe-truyen-v3';
 var SHELL = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'icon-512.png', 'icon.svg'];
 
 self.addEventListener('install', function(e){
